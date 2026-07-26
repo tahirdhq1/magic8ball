@@ -52,9 +52,9 @@ In your Cloudflare **Build** drawer:
 Since you already set `NODE_VERSION = 22` under **Variables and secrets**, Cloudflare will now build with Node v22 and `npx wrangler deploy` will succeed completely!
 
 #### 🖼️ Fixed Banner Image Visibility
-1. Base path in `vite.config.ts` has been updated to relative (`./`).
-2. The `<picture>` element in `index.html` references `./assets/psychic_banner.webp` and `./assets/psychic_banner.jpg`.
-3. Vite automatically bundles and hashes both WebP and JPG versions into `dist/assets/`, ensuring relative URLs load seamlessly across all custom domains, Cloudflare Pages, Workers Assets, and preview environments.
+1. Root-relative base path `/` in `vite.config.ts`.
+2. The `<picture>` element in `index.html` references `/psychic_banner.webp` and `/psychic_banner.jpg` directly from the static root.
+3. Both high-res WebP (`98 KB`) and JPEG (`674 KB`, `2928x352`) banner files are present in `public/` and `dist/`, ensuring `/psychic_banner.webp` and `/psychic_banner.jpg` load seamlessly on Cloudflare Workers Assets (`.workers.dev`), Cloudflare Pages, and custom domains.
 
 ### Step 4: Deploy
 Click **Save and Deploy**. Cloudflare Pages will build your project and give you a live production URL ending in `.pages.dev` (e.g., `https://magic-8-ball.pages.dev`).
