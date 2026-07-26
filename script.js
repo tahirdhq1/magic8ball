@@ -478,8 +478,8 @@ class Magic8BallApp {
 
     // Nav & Modals
     this.soundToggleBtn = document.getElementById("sound-toggle");
-    this.soundOnIcon = this.soundToggleBtn.querySelector(".sound-on-icon");
-    this.soundOffIcon = this.soundToggleBtn.querySelector(".sound-off-icon");
+    this.soundOnIcon = this.soundToggleBtn ? this.soundToggleBtn.querySelector(".sound-on-icon") : null;
+    this.soundOffIcon = this.soundToggleBtn ? this.soundToggleBtn.querySelector(".sound-off-icon") : null;
     this.favoritesBtn = document.getElementById("favorites-btn");
     this.historyBtn = document.getElementById("history-btn");
     this.favCount = document.getElementById("fav-count");
@@ -501,6 +501,7 @@ class Magic8BallApp {
     this.modalFavCount = document.getElementById("modal-fav-count");
 
     // Page Modals (About, Privacy, Terms, Contact)
+    this.navHomeBtn = document.getElementById("nav-home-btn");
     this.aboutModal = document.getElementById("about-modal");
     this.closeAboutModalBtn = document.getElementById("close-about-modal");
     this.navAboutBtn = document.getElementById("nav-about-btn");
@@ -508,10 +509,12 @@ class Magic8BallApp {
 
     this.privacyModal = document.getElementById("privacy-modal");
     this.closePrivacyModalBtn = document.getElementById("close-privacy-modal");
+    this.navPrivacyBtn = document.getElementById("nav-privacy-btn");
     this.privacyLink = document.getElementById("privacy-link");
 
     this.termsModal = document.getElementById("terms-modal");
     this.closeTermsModalBtn = document.getElementById("close-terms-modal");
+    this.navTermsBtn = document.getElementById("nav-terms-btn");
     this.termsLink = document.getElementById("terms-link");
 
     this.contactModal = document.getElementById("contact-modal");
@@ -533,7 +536,7 @@ class Magic8BallApp {
     this.particleSystem = new ParticleSystem("particle-canvas");
 
     // Set initial mute UI
-    if (this.soundFX.isMuted) {
+    if (this.soundFX.isMuted && this.soundOnIcon && this.soundOffIcon) {
       this.soundOnIcon.classList.add("hidden");
       this.soundOffIcon.classList.remove("hidden");
     }
@@ -603,48 +606,56 @@ class Magic8BallApp {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    this.favResultBtn.addEventListener("click", () => this.toggleCurrentFavorite());
-    this.copyResultBtn.addEventListener("click", () => this.copyCurrentResult());
-    this.shareResultBtn.addEventListener("click", () => this.shareCurrentResult());
+    if (this.favResultBtn) this.favResultBtn.addEventListener("click", () => this.toggleCurrentFavorite());
+    if (this.copyResultBtn) this.copyResultBtn.addEventListener("click", () => this.copyCurrentResult());
+    if (this.shareResultBtn) this.shareResultBtn.addEventListener("click", () => this.shareCurrentResult());
 
     // Sound Toggle
-    this.soundToggleBtn.addEventListener("click", () => {
-      const isMuted = this.soundFX.toggleMute();
-      if (isMuted) {
-        this.soundOnIcon.classList.add("hidden");
-        this.soundOffIcon.classList.remove("hidden");
-        this.showToast("Sound muted");
-      } else {
-        this.soundOffIcon.classList.add("hidden");
-        this.soundOnIcon.classList.remove("hidden");
-        this.soundFX.playClick();
-        this.showToast("Sound enabled");
-      }
-    });
+    if (this.soundToggleBtn) {
+      this.soundToggleBtn.addEventListener("click", () => {
+        const isMuted = this.soundFX.toggleMute();
+        if (isMuted) {
+          if (this.soundOnIcon) this.soundOnIcon.classList.add("hidden");
+          if (this.soundOffIcon) this.soundOffIcon.classList.remove("hidden");
+          this.showToast("Sound muted");
+        } else {
+          if (this.soundOffIcon) this.soundOffIcon.classList.add("hidden");
+          if (this.soundOnIcon) this.soundOnIcon.classList.remove("hidden");
+          this.soundFX.playClick();
+          this.showToast("Sound enabled");
+        }
+      });
+    }
 
     // Modal Triggers - History & Favorites
-    this.historyBtn.addEventListener("click", () => this.openHistoryModal());
-    this.closeHistoryModalBtn.addEventListener("click", () => this.closeModal(this.historyModal));
-    this.clearHistoryBtn.addEventListener("click", () => {
-      if (confirm("Are you sure you want to clear your entire question history?")) {
-        AppStorage.clearHistory();
-        this.renderHistory();
-        this.updateBadges();
-        this.showToast("History cleared");
-      }
-    });
+    if (this.historyBtn) this.historyBtn.addEventListener("click", () => this.openHistoryModal());
+    if (this.closeHistoryModalBtn) this.closeHistoryModalBtn.addEventListener("click", () => this.closeModal(this.historyModal));
+    if (this.clearHistoryBtn) {
+      this.clearHistoryBtn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to clear your entire question history?")) {
+          AppStorage.clearHistory();
+          this.renderHistory();
+          this.updateBadges();
+          this.showToast("History cleared");
+        }
+      });
+    }
 
-    this.favoritesBtn.addEventListener("click", () => this.openFavoritesModal());
-    this.closeFavModalBtn.addEventListener("click", () => this.closeModal(this.favoritesModal));
+    if (this.favoritesBtn) this.favoritesBtn.addEventListener("click", () => this.openFavoritesModal());
+    if (this.closeFavModalBtn) this.closeFavModalBtn.addEventListener("click", () => this.closeModal(this.favoritesModal));
 
     // Page Modal Triggers
+    if (this.navHomeBtn) this.navHomeBtn.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }); });
+
     if (this.navAboutBtn) this.navAboutBtn.addEventListener("click", () => this.openAboutModal());
     if (this.aboutLink) this.aboutLink.addEventListener("click", (e) => { e.preventDefault(); this.openAboutModal(); });
     if (this.closeAboutModalBtn) this.closeAboutModalBtn.addEventListener("click", () => this.closeModal(this.aboutModal));
 
+    if (this.navPrivacyBtn) this.navPrivacyBtn.addEventListener("click", () => this.openPrivacyModal());
     if (this.privacyLink) this.privacyLink.addEventListener("click", (e) => { e.preventDefault(); this.openPrivacyModal(); });
     if (this.closePrivacyModalBtn) this.closePrivacyModalBtn.addEventListener("click", () => this.closeModal(this.privacyModal));
 
+    if (this.navTermsBtn) this.navTermsBtn.addEventListener("click", () => this.openTermsModal());
     if (this.termsLink) this.termsLink.addEventListener("click", (e) => { e.preventDefault(); this.openTermsModal(); });
     if (this.closeTermsModalBtn) this.closeTermsModalBtn.addEventListener("click", () => this.closeModal(this.termsModal));
 
@@ -1039,8 +1050,8 @@ class Magic8BallApp {
     const historyCount = AppStorage.getHistory().length;
     const favCount = AppStorage.getFavorites().length;
 
-    this.historyCount.textContent = historyCount;
-    this.favCount.textContent = favCount;
+    if (this.historyCount) this.historyCount.textContent = historyCount;
+    if (this.favCount) this.favCount.textContent = favCount;
   }
 
   showToast(message) {
