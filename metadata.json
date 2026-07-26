@@ -1,0 +1,6 @@
+{
+  "name": "Magic 8 Ball Online",
+  "description": "A premium interactive Magic 8 Ball game and decision maker online with long-form guide and FAQs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

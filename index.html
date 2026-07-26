@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Primary Meta Tags -->
+  <title>Magic 8 Ball Online - Free Interactive Decision Maker & Fortune Teller</title>
+  <meta name="title" content="Magic 8 Ball Online - Free Interactive Decision Maker & Fortune Teller" />
+  <meta name="description" content="Ask the Magic 8 Ball any yes or no question online. Get instant answers, classic fortune predictions, sound effects, question history, and daily fortune guidance." />
+  <meta name="keywords" content="Magic 8 Ball, Ask Magic 8 Ball, Magic 8 Ball Online, Yes or No Questions, Fortune Teller, Decision Maker, Oracle" />
+  <meta name="author" content="Magic 8 Ball Online" />
+  <meta name="theme-color" content="#7c3aed" />
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <!-- Particle Background Canvas -->
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+
+  <!-- Main Container -->
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-container">
+        <a href="#" class="brand-logo" aria-label="Magic 8 Ball Online Homepage">
+          <div class="logo-icon">
+            <span>8</span>
+          </div>
+          <span class="brand-name">Magic 8 Ball <span class="brand-badge">Online</span></span>
+        </a>
+
+        <nav class="header-nav" aria-label="Main Navigation">
+          <button id="nav-about-btn" class="nav-btn" aria-label="About Magic 8 Ball">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span>About</span>
+          </button>
+
+          <button id="nav-contact-btn" class="nav-btn" aria-label="Contact Support">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span>Contact</span>
+          </button>
+
+          <button id="sound-toggle" class="icon-btn" aria-label="Toggle sound effects" title="Toggle Sound">
+            <svg class="icon sound-on-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+            <svg class="icon sound-off-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          </button>
+
+          <button id="favorites-btn" class="nav-btn" aria-label="View saved favorite answers">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <span>Favorites</span>
+            <span id="fav-count" class="badge">0</span>
+          </button>
+
+          <button id="history-btn" class="nav-btn" aria-label="View question history">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>History</span>
+            <span id="history-count" class="badge">0</span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+      
+      <!-- START HERO -->
+      <section id="hero" class="hero-section">
+        <div class="hero-container">
+          <div class="hero-badge">
+            <span class="sparkle-icon">✨</span>
+            <span>Digital Oracle & Decision Maker</span>
+          </div>
+
+          <h1 class="hero-title">
+            Ask the <span class="gradient-text">Magic 8 Ball</span>
+          </h1>
+          <p class="hero-subtitle">
+            Focus your mind on a yes or no question. Shake the mystical ball to reveal your fate.
+          </p>
+
+          <!-- Question Input Box -->
+          <div class="question-box-wrapper">
+            <form id="question-form" class="question-form" action="javascript:void(0);">
+              <div class="input-container">
+                <input 
+                  type="text" 
+                  id="question-input" 
+                  class="question-input" 
+                  placeholder="Ask any yes or no question... (e.g., Will today be lucky?)" 
+                  autocomplete="off" 
+                  maxlength="150"
+                  aria-label="Your Question"
+                  aria-describedby="input-error"
+                />
+                <button type="button" id="clear-input-btn" class="clear-btn hidden" aria-label="Clear question input">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+
+              <!-- Validation Error Message -->
+              <div id="input-error" class="input-error hidden" role="alert">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Please type a question before shaking the Magic 8 Ball!</span>
+              </div>
+            </form>
+
+            <!-- Quick Questions Suggestions -->
+            <div class="quick-questions">
+              <span class="quick-label">Try asking:</span>
+              <div class="chips-list">
+                <button type="button" class="chip-btn" data-question="Will I achieve my goals this year?">Will I achieve my goals?</button>
+                <button type="button" class="chip-btn" data-question="Is good fortune coming my way?">Is fortune coming?</button>
+                <button type="button" class="chip-btn" data-question="Should I take a leap of faith?">Should I take the leap?</button>
+                <button type="button" class="chip-btn" data-question="Will my dreams come true?">Will dreams come true?</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- START MAGIC BALL -->
+          <div class="ball-stage">
+            <div class="ball-reflection-shadow" id="ball-shadow" aria-hidden="true"></div>
+
+            <div 
+              id="magic-ball" 
+              class="magic-ball" 
+              tabindex="0" 
+              role="button" 
+              aria-label="Magic 8 Ball. Click or press Enter to shake."
+            >
+              <!-- Glossy Specular Reflection -->
+              <div class="ball-highlight" aria-hidden="true"></div>
+              
+              <!-- Front Face 8 Logo (Visible before shake / on reset) -->
+              <div id="ball-front-face" class="ball-front-face">
+                <div class="eight-circle">
+                  <span class="eight-number">8</span>
+                </div>
+              </div>
+
+              <!-- Liquid Viewport Portal Window (Reveals answer die) -->
+              <div id="liquid-window" class="liquid-window hidden">
+                <div class="die-container" id="die-container">
+                  <div class="floating-die" id="floating-die">
+                    <svg class="die-shape" viewBox="0 0 100 100" preserveAspectRatio="none">
+                      <polygon points="50,5 95,90 5,90" fill="url(#die-gradient)" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2" />
+                      <defs>
+                        <linearGradient id="die-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#1e1b4b" />
+                          <stop offset="50%" stop-color="#0f172a" />
+                          <stop offset="100%" stop-color="#020617" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <div class="die-text-wrapper">
+                      <p id="window-answer-text" class="die-text">SHAKE ME</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shake Action Button -->
+            <div class="shake-action-group">
+              <button id="shake-btn" class="primary-btn shake-btn">
+                <span class="btn-glow"></span>
+                <span class="btn-content">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
+                  <span id="shake-btn-text">Shake the 8 Ball</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <!-- END MAGIC BALL -->
+
+          <!-- Answer Result Card (Revealed after shake) -->
+          <div id="result-card" class="result-card hidden" aria-live="polite">
+            <div class="result-header">
+              <span id="result-sentiment-badge" class="sentiment-badge affirmative">
+                ✨ Positive Outcome
+              </span>
+              <span id="result-timestamp" class="result-timestamp">Just now</span>
+            </div>
+
+            <div class="result-body">
+              <p class="asked-question-label">You asked:</p>
+              <p id="result-question-text" class="asked-question-text">"Will today bring good fortune?"</p>
+              
+              <div class="result-answer-box">
+                <span class="oracle-label">The Magic 8 Ball says:</span>
+                <h2 id="result-answer-text" class="result-answer-heading">It is certain</h2>
+              </div>
+            </div>
+
+            <div class="result-actions">
+              <button id="ask-again-btn" class="action-btn primary-action">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"></path><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                <span>Ask Another Question</span>
+              </button>
+
+              <button id="fav-result-btn" class="action-btn secondary-action" aria-label="Save this answer to favorites">
+                <svg class="icon heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span id="fav-btn-label">Favorite</span>
+              </button>
+
+              <button id="copy-result-btn" class="action-btn secondary-action" aria-label="Copy answer to clipboard">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy</span>
+              </button>
+
+              <button id="share-result-btn" class="action-btn secondary-action" aria-label="Share this prediction">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                <span>Share</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+      <!-- END HERO -->
+
+      <!-- START ARTICLE PLACEHOLDER -->
+      <section id="article" class="placeholder-section">
+        <div class="section-container">
+          <div class="placeholder-card glass-panel">
+            <div class="placeholder-header">
+              <span class="placeholder-badge">SEO Article Placeholder</span>
+              <h2 class="placeholder-title">The Complete Guide to the Magic 8 Ball & Oracle History</h2>
+            </div>
+            <p class="placeholder-desc">
+              This space is designated for long-form SEO content exploring the history, science, probability math of the classic 20 Magic 8 Ball answers, and decision-making techniques.
+            </p>
+            <div class="placeholder-wireframe">
+              <div class="wireframe-line long"></div>
+              <div class="wireframe-line medium"></div>
+              <div class="wireframe-line short"></div>
+              <div class="wireframe-grid">
+                <div class="wireframe-box"></div>
+                <div class="wireframe-box"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- END ARTICLE PLACEHOLDER -->
+
+      <!-- START FAQ PLACEHOLDER -->
+      <section id="faq" class="placeholder-section">
+        <div class="section-container">
+          <div class="placeholder-card glass-panel">
+            <div class="placeholder-header">
+              <span class="placeholder-badge">FAQ Placeholder</span>
+              <h2 class="placeholder-title">Frequently Asked Questions</h2>
+            </div>
+            <p class="placeholder-desc">
+              Comprehensive FAQ section placeholder for search engine indexing and user questions regarding accuracy, probability, and standard response categories.
+            </p>
+            <div class="placeholder-wireframe">
+              <div class="wireframe-line medium"></div>
+              <div class="wireframe-line long"></div>
+              <div class="wireframe-line short"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- END FAQ PLACEHOLDER -->
+
+    </main>
+
+    <!-- START FOOTER -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <div class="logo-icon small"><span>8</span></div>
+            <span class="brand-name">Magic 8 Ball <span class="brand-badge">Online</span></span>
+          </div>
+          <p class="footer-tagline">The world's favorite online fortune teller and decision-making oracle.</p>
+        </div>
+
+        <div class="footer-links">
+          <div class="link-group">
+            <span class="group-title">Legal & Info</span>
+            <a href="#about" id="about-link" class="footer-link">About Magic 8 Ball</a>
+            <a href="#privacy" id="privacy-link" class="footer-link">Privacy Policy</a>
+            <a href="#terms" id="terms-link" class="footer-link">Terms of Service</a>
+            <a href="#disclaimer" id="disclaimer-link" class="footer-link">Disclaimer</a>
+          </div>
+          <div class="link-group">
+            <span class="group-title">Connect</span>
+            <a href="#contact" id="contact-link" class="footer-link">Contact Support</a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="footer-link">Twitter / X</a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer-link">Facebook</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Magic 8 Ball Online. All rights reserved. Designed for entertainment and decision guidance.</p>
+      </div>
+    </footer>
+    <!-- END FOOTER -->
+
+  </div>
+
+  <!-- START MODALS -->
+  <!-- History Drawer/Modal -->
+  <div id="history-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="history-modal-title">
+    <div class="modal-dialog glass-panel">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="history-modal-title" class="modal-title">Question History</h2>
+          <span id="modal-history-count" class="badge">0</span>
+        </div>
+        <button id="close-history-modal" class="close-btn" aria-label="Close history modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div id="history-list" class="history-list">
+          <!-- Dynamically populated -->
+        </div>
+        <div id="empty-history-state" class="empty-state hidden">
+          <div class="empty-icon">🔮</div>
+          <p class="empty-text">No question history yet.</p>
+          <p class="empty-subtext">Ask the Magic 8 Ball a question to start recording your history!</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="clear-history-btn" class="danger-btn">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span>Clear All History</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Favorites Drawer/Modal -->
+  <div id="favorites-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="fav-modal-title">
+    <div class="modal-dialog glass-panel">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="fav-modal-title" class="modal-title">Saved Favorites</h2>
+          <span id="modal-fav-count" class="badge">0</span>
+        </div>
+        <button id="close-fav-modal" class="close-btn" aria-label="Close favorites modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div id="favorites-list" class="history-list">
+          <!-- Dynamically populated -->
+        </div>
+        <div id="empty-fav-state" class="empty-state hidden">
+          <div class="empty-icon">⭐</div>
+          <p class="empty-text">No favorite answers saved.</p>
+          <p class="empty-subtext">Click the heart button on any answer result to save it here!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div id="about-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="about-modal-title">
+    <div class="modal-dialog glass-panel page-modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="about-modal-title" class="modal-title">About Magic 8 Ball Online</h2>
+        </div>
+        <button id="close-about-modal" class="close-btn" aria-label="Close about modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-page-body">
+        <div class="modal-hero-badge">🔮 Digital Fortune Teller & Decision Maker</div>
+        <p class="modal-lead-text">Magic 8 Ball Online is a modern, interactive web application bringing the world's most beloved fortune-telling toy into the digital age with rich animations, sound effects, and privacy-first local storage.</p>
+
+        <div class="info-section-grid">
+          <div class="info-card">
+            <h3 class="info-card-title">✨ The Classic 20 Answers</h3>
+            <p>Faithful to the original 1950s oracle created by Albert C. Carter and Abe Bookman, our ball contains the classic 20 predictions: 10 affirmative, 5 non-committal, and 5 negative outcomes.</p>
+          </div>
+          <div class="info-card">
+            <h3 class="info-card-title">⚡ Instant Pseudo-Random Oracle</h3>
+            <p>Our algorithm ensures unbiased random selection across all outcomes every time you ask a question or shake the mystical ball.</p>
+          </div>
+          <div class="info-card">
+            <h3 class="info-card-title">🔒 100% Privacy Focused</h3>
+            <p>Your questions, history, and favorite answers stay exclusively inside your browser's local storage. We never collect or sell your personal queries.</p>
+          </div>
+          <div class="info-card">
+            <h3 class="info-card-title">🎧 Mystical Sound & Motion</h3>
+            <p>Enjoy realistic shake rumbles, audio chiming, particle bursts, and physical haptic feedback designed for a delightful experience on desktop and mobile.</p>
+          </div>
+        </div>
+
+        <div class="disclaimer-callout">
+          <strong>Entertainment Disclaimer:</strong> Magic 8 Ball Online is designed strictly for fun, inspiration, and decision guidance. Answers should not be taken as professional legal, financial, or medical advice!
+        </div>
+
+        <div class="modal-nav-crosslinks">
+          <span>Explore More:</span>
+          <button type="button" class="link-btn open-privacy-btn">Privacy Policy</button> • 
+          <button type="button" class="link-btn open-terms-btn">Terms of Service</button> • 
+          <button type="button" class="link-btn open-disclaimer-btn">Disclaimer</button> • 
+          <button type="button" class="link-btn open-contact-btn">Contact Support</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacy-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="privacy-modal-title">
+    <div class="modal-dialog glass-panel page-modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="privacy-modal-title" class="modal-title">Privacy Policy</h2>
+        </div>
+        <button id="close-privacy-modal" class="close-btn" aria-label="Close privacy policy modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-page-body">
+        <p class="modal-effective-date">Last Updated: January 2026</p>
+        
+        <p class="modal-intro-text">At Magic 8 Ball Online, your privacy is our top priority. This Privacy Policy outlines how we handle user information when you visit and interact with our application.</p>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">1. Information We Do NOT Collect</h3>
+          <p>We do not require you to create an account, register, or provide personal details such as your full name, phone number, physical address, or payment details. You can freely use all features of the Magic 8 Ball anonymously.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">2. Local Storage Usage</h3>
+          <p>To provide features like question history, question counters, sound preferences, and saved favorite answers, Magic 8 Ball Online utilizes your web browser's <code>localStorage</code> technology. This data remains 100% local to your device and is never transmitted to or stored on external servers. You can clear this data at any time via your browser settings or using the "Clear All History" button inside the app.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">3. Cookies & Analytics</h3>
+          <p>We may use minimal, privacy-friendly cookies or standard browser web storage strictly for essential operational state (such as remembering audio mute preferences) and aggregated, non-identifiable usage statistics to improve site performance.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">4. Third-Party Links</h3>
+          <p>If you click on external links (such as social media sharing buttons on Twitter or Facebook), you will be directed to third-party sites. We encourage you to review the privacy policies of those respective platforms.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">5. Children's Privacy</h3>
+          <p>Our application is family-friendly and safe for users of all ages. We do not knowingly collect personal data from children.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">6. Contact Us About Privacy</h3>
+          <p>If you have questions or concerns regarding this Privacy Policy, feel free to <button type="button" class="link-btn open-contact-btn">contact our support team</button>.</p>
+        </div>
+
+        <div class="modal-nav-crosslinks">
+          <span>Quick Links:</span>
+          <button type="button" class="link-btn open-about-btn">About Us</button> • 
+          <button type="button" class="link-btn open-terms-btn">Terms of Service</button> • 
+          <button type="button" class="link-btn open-contact-btn">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms of Service Modal -->
+  <div id="terms-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="terms-modal-title">
+    <div class="modal-dialog glass-panel page-modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="terms-modal-title" class="modal-title">Terms of Service</h2>
+        </div>
+        <button id="close-terms-modal" class="close-btn" aria-label="Close terms of service modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-page-body">
+        <p class="modal-effective-date">Last Updated: January 2026</p>
+        
+        <p class="modal-intro-text">Please read these Terms of Service carefully before using Magic 8 Ball Online. By accessing or using our application, you agree to be bound by these terms.</p>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">1. Entertainment Purposes Only</h3>
+          <p>Magic 8 Ball Online is designed strictly for novelty, decision guidance, and entertainment purposes. All answers, predictions, and sentiment results generated by the oracle are produced by a pseudo-random generator and MUST NOT be relied upon for making major medical, financial, legal, business, or life decisions.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">2. User Conduct</h3>
+          <p>You agree to use this website responsibly. You must not attempt to disrupt or tamper with the web application's operations, introduce malicious code, or engage in automated scraping or automated denial-of-service attacks.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">3. Intellectual Property Rights</h3>
+          <p>All original graphic elements, code, custom styling, animations, and sound synthesizers on this website are the intellectual property of Magic 8 Ball Online. You may not copy, re-distribute, or reverse-engineer our software without explicit prior written authorization.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">4. Limitation of Liability</h3>
+          <p>Under no circumstances shall Magic 8 Ball Online or its creators be held liable for any direct, indirect, incidental, or consequential damages resulting from your reliance on predictions, answers, or features provided by this applet.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">5. Modifications & Updates</h3>
+          <p>We reserve the right to modify or update these Terms of Service at any time without prior notice. Continued use of the service constitutes acceptance of any revised terms.</p>
+        </div>
+
+        <div class="modal-nav-crosslinks">
+          <span>Quick Links:</span>
+          <button type="button" class="link-btn open-about-btn">About Us</button> • 
+          <button type="button" class="link-btn open-privacy-btn">Privacy Policy</button> • 
+          <button type="button" class="link-btn open-disclaimer-btn">Disclaimer</button> • 
+          <button type="button" class="link-btn open-contact-btn">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div id="contact-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="contact-modal-title">
+    <div class="modal-dialog glass-panel page-modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="contact-modal-title" class="modal-title">Contact Support & Feedback</h2>
+        </div>
+        <button id="close-contact-modal" class="close-btn" aria-label="Close contact modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-page-body">
+        <p class="modal-intro-text">Have a question, feedback, or feature request? We would love to hear from you! Fill out the contact form below or reach out directly.</p>
+
+        <div class="contact-methods-grid">
+          <div class="contact-method-card">
+            <div class="contact-card-icon">✉️</div>
+            <div>
+              <strong>Email Support</strong>
+              <p>support@magic8ball.online</p>
+            </div>
+          </div>
+          <div class="contact-method-card">
+            <div class="contact-card-icon">⚡</div>
+            <div>
+              <strong>Response Time</strong>
+              <p>Usually within 24 hours</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="contact-form" class="contact-form" action="javascript:void(0);">
+          <div class="form-group">
+            <label for="contact-name" class="form-label">Your Name</label>
+            <input type="text" id="contact-name" class="form-input" placeholder="e.g. Alex Morgan" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email" class="form-label">Your Email Address</label>
+            <input type="email" id="contact-email" class="form-input" placeholder="e.g. alex@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="contact-subject" class="form-label">Subject</label>
+            <select id="contact-subject" class="form-select" required>
+              <option value="">Select a subject...</option>
+              <option value="General Inquiry">General Inquiry</option>
+              <option value="Feedback & Ideas">Feedback & Ideas</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="Privacy Concern">Privacy Concern</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message" class="form-label">Message</label>
+            <textarea id="contact-message" class="form-textarea" rows="4" placeholder="How can we help you?" required></textarea>
+          </div>
+
+          <div id="contact-success-msg" class="contact-success hidden">
+            ✨ Thank you! Your message has been sent successfully. We will get back to you soon.
+          </div>
+
+          <button type="submit" id="submit-contact-btn" class="primary-btn submit-btn">
+            <span>Send Message</span>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 2 22 2"></polygon></svg>
+          </button>
+        </form>
+
+        <div class="modal-nav-crosslinks">
+          <span>Links:</span>
+          <button type="button" class="link-btn open-about-btn">About Us</button> • 
+          <button type="button" class="link-btn open-privacy-btn">Privacy Policy</button> • 
+          <button type="button" class="link-btn open-terms-btn">Terms of Service</button> • 
+          <button type="button" class="link-btn open-disclaimer-btn">Disclaimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disclaimer Modal -->
+  <div id="disclaimer-modal" class="modal-backdrop hidden" aria-hidden="true" role="dialog" aria-labelledby="disclaimer-modal-title">
+    <div class="modal-dialog glass-panel page-modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="disclaimer-modal-title" class="modal-title">Legal & Usage Disclaimer</h2>
+        </div>
+        <button id="close-disclaimer-modal" class="close-btn" aria-label="Close disclaimer modal">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body modal-page-body">
+        <div class="modal-hero-badge">⚠️ Important Notice</div>
+        <p class="modal-lead-text">Magic 8 Ball Online is an interactive novelty application created exclusively for entertainment, fun, and casual inspiration.</p>
+
+        <div class="disclaimer-callout">
+          <strong>Crucial Notice:</strong> Do NOT base important life, medical, financial, legal, career, or relationship decisions on the answers or predictions provided by this virtual oracle.
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">1. No Professional Advice</h3>
+          <p>The responses generated by Magic 8 Ball Online do not constitute medical, psychological, financial, investment, legal, or professional counsel. If you require advice in any of these areas, please consult a certified professional.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">2. Pseudo-Random Outcome Generation</h3>
+          <p>All 20 fortune responses are selected at random using standard client-side pseudorandom mathematical algorithms. The app does not possess real mystical powers, supernatural insight, or predictive accuracy regarding future events.</p>
+        </div>
+
+        <div class="policy-block">
+          <h3 class="policy-heading">3. User Responsibility & Assumption of Risk</h3>
+          <p>By using this web application, you acknowledge and agree that any actions you take based on the answers received are taken at your own risk and discretion. The creators and operators of Magic 8 Ball Online assume no responsibility or liability for decisions made by users.</p>
+        </div>
+
+        <div class="modal-nav-crosslinks">
+          <span>Navigation:</span>
+          <button type="button" class="link-btn open-about-btn">About Us</button> • 
+          <button type="button" class="link-btn open-privacy-btn">Privacy Policy</button> • 
+          <button type="button" class="link-btn open-terms-btn">Terms of Service</button> • 
+          <button type="button" class="link-btn open-contact-btn">Contact Support</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div id="toast-notification" class="toast-notification hidden" role="status" aria-live="polite">
+    <span id="toast-icon" class="toast-icon">✨</span>
+    <span id="toast-message" class="toast-message">Copied to clipboard!</span>
+  </div>
+  <!-- END MODALS -->
+
+  <!-- Application Script -->
+  <script src="./script.js"></script>
+</body>
+</html>
