@@ -37,22 +37,24 @@ Enter the following settings in the Cloudflare setup form:
 | **Production branch** | `main` |
 | **Framework preset** | `Vite` |
 | **Build command** | `npm run build` |
-| **Deploy command** | *(Leave empty)* or `npx wrangler@3.106.0 deploy` |
+| **Deploy command** | `npx wrangler deploy` (or `npx wrangler@3.106.0 deploy`) |
+| **Non-production branch deploy command** | `npx wrangler deploy` (or `npx wrangler@3.106.0 deploy`) |
 | **Build output directory** | `dist` |
 | **Root directory** | `/` (leave blank) |
 
-#### ⚠️ How to Fix "Deploy command failed" or Node Version Warning
-In Cloudflare Workers Assets / Pages:
-1. Go to **Workers & Pages** > **magic8ball** > **Settings**.
-2. Under **Build settings**:
-   - If **Deploy command** says `npx wrangler deploy`, edit build settings and clear the Deploy command (leave it blank) OR change it to `npx wrangler@3.106.0 deploy`.
-   - Cloudflare Pages / Workers Assets automatically deploys the contents of `dist` after `npm run build` completes.
-3. Save settings and go to **Deployments** > **Retry build**.
+#### 🛠️ Deploy Command Settings
+In your Cloudflare **Build** drawer:
+1. **Deploy command**: Write `npx wrangler deploy` (or `npx wrangler@3.106.0 deploy`).
+2. **Non-production branch deploy command**: Write `npx wrangler deploy` (or `npx wrangler@3.106.0 deploy`).
+3. Click the blue **Update** button at the bottom right.
+4. Go to the **Deployments** tab and click **Retry build** (or **New deployment**).
+
+Since you already set `NODE_VERSION = 22` under **Variables and secrets**, Cloudflare will now build with Node v22 and `npx wrangler deploy` will succeed completely!
 
 #### 🖼️ Fixed Banner Image Visibility
-1. Base path in `vite.config.ts` has been set to `/` (root-relative).
-2. The `<picture>` element in `index.html` references `/psychic_banner.webp` and `/psychic_banner.jpg` directly from the `public` asset root.
-3. Both WebP and JPG optimized images are included in `public/` and built cleanly into `dist/`.
+1. Base path in `vite.config.ts` has been updated to relative (`./`).
+2. The `<picture>` element in `index.html` references `./assets/psychic_banner.webp` and `./assets/psychic_banner.jpg`.
+3. Vite automatically bundles and hashes both WebP and JPG versions into `dist/assets/`, ensuring relative URLs load seamlessly across all custom domains, Cloudflare Pages, Workers Assets, and preview environments.
 
 ### Step 4: Deploy
 Click **Save and Deploy**. Cloudflare Pages will build your project and give you a live production URL ending in `.pages.dev` (e.g., `https://magic-8-ball.pages.dev`).
