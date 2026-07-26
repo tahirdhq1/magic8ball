@@ -51,10 +51,10 @@ In your Cloudflare **Build** drawer:
 
 Since you already set `NODE_VERSION = 22` under **Variables and secrets**, Cloudflare will now build with Node v22 and `npx wrangler deploy` will succeed completely!
 
-#### 🖼️ Fixed Banner Image Visibility
-1. Root-relative base path `/` in `vite.config.ts`.
-2. The `<picture>` element in `index.html` references `/psychic_banner.webp` and `/psychic_banner.jpg` directly from the static root.
-3. Both high-res WebP (`98 KB`) and JPEG (`674 KB`, `2928x352`) banner files are present in `public/` and `dist/`, ensuring `/psychic_banner.webp` and `/psychic_banner.jpg` load seamlessly on Cloudflare Workers Assets (`.workers.dev`), Cloudflare Pages, and custom domains.
+#### 🖼️ Fixed Banner Image Visibility (AdBlock Proof)
+1. Updated image assets to clean, unblocked names (`relationship_chat_offer.webp` and `relationship_chat_offer.jpg`).
+2. Updated CSS class names to `.advisor-feature-wrapper`, `.advisor-feature-link`, and `.advisor-feature-img` to prevent browser extensions (AdBlock, uBlock, Brave Shields) from blocking the relationship offer card.
+3. Both high-res WebP (`98 KB`) and JPEG (`674 KB`, `2928x352`) banner files are bundled into `dist/assets/` and copied to `dist/`, ensuring zero-404 asset delivery across Cloudflare Workers Assets (`.workers.dev`), Cloudflare Pages, and custom domains.
 
 ### Step 4: Deploy
 Click **Save and Deploy**. Cloudflare Pages will build your project and give you a live production URL ending in `.pages.dev` (e.g., `https://magic-8-ball.pages.dev`).

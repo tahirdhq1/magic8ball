@@ -677,7 +677,8 @@ button {
   height: 22px;
 }
 
-/* Promotional Banner Styling */
+/* Featured Advisor Offer Card Styling (Anti-AdBlock safe naming) */
+.advisor-feature-wrapper,
 .promo-banner-wrapper {
   margin-top: 1.75rem;
   width: 100%;
@@ -689,6 +690,7 @@ button {
   align-items: center;
 }
 
+.advisor-feature-link,
 .promo-banner-link {
   display: inline-block;
   width: 100%;
@@ -697,13 +699,17 @@ button {
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   text-decoration: none;
+  background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
+  min-height: 80px;
 }
 
+.advisor-feature-link:hover,
 .promo-banner-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(124, 58, 237, 0.25), 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
+.advisor-feature-img,
 .promo-banner-img {
   width: 100%;
   height: auto;
