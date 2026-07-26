@@ -37,23 +37,22 @@ Enter the following settings in the Cloudflare setup form:
 | **Production branch** | `main` |
 | **Framework preset** | `Vite` |
 | **Build command** | `npm run build` |
+| **Deploy command** | *(Leave empty)* or `npx wrangler@3.106.0 deploy` |
 | **Build output directory** | `dist` |
 | **Root directory** | `/` (leave blank) |
 
-#### 🛠️ Fixed in Codebase & Cloudflare Instructions
-We have updated `package.json` with `"wrangler": "3.106.0"` in `devDependencies`. This guarantees that `npx wrangler deploy` will use Wrangler v3 (which is compatible with Node 20.18.0) during deployment.
+#### ⚠️ How to Fix "Deploy command failed" or Node Version Warning
+In Cloudflare Workers Assets / Pages:
+1. Go to **Workers & Pages** > **magic8ball** > **Settings**.
+2. Under **Build settings**:
+   - If **Deploy command** says `npx wrangler deploy`, edit build settings and clear the Deploy command (leave it blank) OR change it to `npx wrangler@3.106.0 deploy`.
+   - Cloudflare Pages / Workers Assets automatically deploys the contents of `dist` after `npm run build` completes.
+3. Save settings and go to **Deployments** > **Retry build**.
 
-**Option A (Recommended): Update Node.js to v22 in Cloudflare Settings**
-1. In Cloudflare Dashboard, navigate to **Workers & Pages** > **magic8ball**.
-2. Click **Settings** > **Variables and Secrets** (or **Environment Variables**).
-3. Click **Add variable**:
-   - **Variable name:** `NODE_VERSION`
-   - **Value:** `22`
-4. Click **Save**.
-5. Go to **Deployments** and click **Retry build**.
-
-**Option B: Re-trigger Build with Updated `package.json`**
-Push the updated project code to your GitHub repository or click **Retry build** in Cloudflare. Cloudflare will install the pinned `wrangler@3.106.0` dependency and complete the deployment successfully!
+#### 🖼️ Fixed Banner Image Visibility
+1. Base path in `vite.config.ts` has been set to `/` (root-relative).
+2. The `<picture>` element in `index.html` references `/psychic_banner.webp` and `/psychic_banner.jpg` directly from the `public` asset root.
+3. Both WebP and JPG optimized images are included in `public/` and built cleanly into `dist/`.
 
 ### Step 4: Deploy
 Click **Save and Deploy**. Cloudflare Pages will build your project and give you a live production URL ending in `.pages.dev` (e.g., `https://magic-8-ball.pages.dev`).
