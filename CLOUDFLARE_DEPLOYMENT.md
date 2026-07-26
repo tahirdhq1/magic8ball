@@ -28,19 +28,29 @@ This method connects Cloudflare directly to your GitHub repository. Every time y
 5. Connect your GitHub account and authorize Cloudflare.
 6. Select your `magic-8-ball` repository and click **Begin setup**.
 
-### Step 3: Configure Build Settings
+### Step 3: Configure Build Settings & Environment Variables
 Enter the following settings in the Cloudflare setup form:
 
 | Setting | Value |
 | :--- | :--- |
-| **Project name** | `magic-8-ball` (or your preferred name) |
-| **Production branch** | `main` (or `master`) |
+| **Project name** | `magic8ball` |
+| **Production branch** | `main` |
 | **Framework preset** | `Vite` |
 | **Build command** | `npm run build` |
 | **Build output directory** | `dist` |
 | **Root directory** | `/` (leave blank) |
 
-*Note: Environment variable `NODE_VERSION` will automatically set to `22` via `.nvmrc` and `.node-version` included in the project.*
+#### ⚠️ CRITICAL: Set Node.js Version 22 in Cloudflare Settings
+Wrangler requires **Node.js v22+**. Cloudflare defaults to Node 20 (`nodejs@20.18.0`) when build variables are empty.
+
+To fix the build error in Cloudflare:
+1. In Cloudflare Dashboard, go to your project **magic8ball** under **Workers & Pages**.
+2. Click **Settings** > **Variables and Secrets** (or **Builds & Deployments** > **Environment Variables**).
+3. Click **Add variable**:
+   - **Variable name:** `NODE_VERSION`
+   - **Value:** `22`
+4. Click **Save**.
+5. Go back to **Deployments** and click **Retry build**.
 
 ### Step 4: Deploy
 Click **Save and Deploy**. Cloudflare Pages will build your project and give you a live production URL ending in `.pages.dev` (e.g., `https://magic-8-ball.pages.dev`).
