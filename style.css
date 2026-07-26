@@ -692,21 +692,22 @@ button {
 
 .advisor-feature-link,
 .promo-banner-link {
-  display: inline-block;
+  display: block;
   width: 100%;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.18), 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   text-decoration: none;
-  background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
-  min-height: 80px;
+  background: #1e1b4b;
 }
 
 .advisor-feature-link:hover,
 .promo-banner-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.25), 0 4px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.3), 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-color: rgba(168, 85, 247, 0.5);
 }
 
 .advisor-feature-img,
@@ -715,7 +716,8 @@ button {
   height: auto;
   display: block;
   border-radius: 12px;
-  object-fit: contain;
+  object-fit: cover;
+  aspect-ratio: 1200 / 144;
 }
 /* END MAGIC BALL */
 
