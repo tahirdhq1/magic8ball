@@ -40,7 +40,7 @@ Enter the following settings in the Cloudflare setup form:
 | **Build output directory** | `dist` |
 | **Root directory** | `/` (leave blank) |
 
-*Note: Environment variable `NODE_VERSION` will automatically set to `20` via `.nvmrc` included in the project.*
+*Note: Environment variable `NODE_VERSION` will automatically set to `22` via `.nvmrc` and `.node-version` included in the project.*
 
 ### Step 4: Deploy
 Click **Save and Deploy**. Cloudflare Pages will build your project and give you a live production URL ending in `.pages.dev` (e.g., `https://magic-8-ball.pages.dev`).
